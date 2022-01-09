@@ -16,6 +16,18 @@ if (global === "전역 변수") {
 
 console.log(global); // 지역 변수 (전역 변수 오염)
 
+// 함수단위로 짜면 전역 변수가 오염되지 않음
+
+var global = "전역 변수";
+
+(() => {
+    var global = "지역 변수";
+
+    console.log(global); // 지역 변수
+})();
+
+console.log(global); // 전역 변수
+
 /**
  * let과 const는 block단위 스코프를 가지기 때문에
  * 개발자가 생각한 대로 움직이기 좋음
