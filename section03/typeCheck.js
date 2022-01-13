@@ -1,0 +1,123 @@
+/**
+ *
+ * Javascript라는 언어는 동적인 타입을 가지는 언어이다.
+ * 따라서 타입검사가 어렵기 때문에 하나하나 잘 찾아서 이용해야 하는 주의점들이 있다.
+ * 일일이 모두 외워서 할 수는 없기 때문에, 검사해가며 확인하는 것이 좋고,
+ *
+ * Primitive와 Reference의 차이를 유념하면서 코딩해야 한다.
+ *
+ * 타입 체크
+ *
+ * 1. typeof 연산자
+ *  typeof 연산자는 타입 평가 후에 문자열로 반환
+ */
+
+typeof "문자열"; // 'string'
+typeof boolean; // 'boolean'
+typeof undefined; // 'undefined'
+typeof 123; // 'number'
+typeof Symbol(); // 'symbol'
+
+/**
+ * PRIMITIVE vs REFERENCE
+ * 원시값(불변) vs 레퍼런스 (Object : Array, function, Date...)
+ *
+ * typeof 함수는 프리미티브 값들은 잘 감별해내지만
+ * 레퍼런스 값들은 typeof로 감별해 내기 쉽지 않다.
+ * ※ 만능은 아니다
+ */
+console.log(typeof null); // object
+//typeof의 가장 큰 문제점,  JavaScript에서도 인정한 언어적인 오류
+
+function myFunction() {}
+console.log(typeof myFunction); // function
+
+class MyClass {}
+console.log(typeof MyClass); // function
+
+const str = new String("문자열");
+console.log(typeof str); // object
+
+/**
+ * Reference 타입검사가 어려운 이유
+ *
+ * JS는 동적으로 변하는 언어이기 때문에
+ * type 까지 동적이다.
+ */
+
+/**
+ * instanceof 연산자
+ * 객체의 프로토타입 체인을 검사
+ */
+
+// 사람 생성자 함수
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const meri = new Person("meri", 32);
+
+console.log(meri instanceof Person); // true
+
+const m = {
+  name: "meri",
+  age: 32,
+};
+
+console.log(m instanceof Person); // false
+
+/**
+ * typeof는 프리미티브와 관련된 것을 확인하는데 용이하다면
+ * instanceof는 객체와 관련된 것을 확인하는데 용이하다
+ */
+
+const arr = [];
+const func = function () {};
+const date = new Date();
+
+console.log(arr instanceof Array); // true
+console.log(arr instanceof Function); // false
+console.log(func instanceof Function); // true
+console.log(date instanceof Date); // true
+
+/**
+ * 그러나 모든 레퍼런스 타입의 최상위는 Object이기 때문에
+ * instanceof Object에서 혼란이 생긴다.
+ */
+const arr = [];
+const func = function () {};
+const date = new Date();
+
+console.log(arr instanceof Object); // true
+console.log(func instanceof Object); // true
+console.log(date instanceof Object); // true
+
+/**
+ * 이러한 JS 타입 검사의 어려움 때문에 typeof와 instanceof를 잘 쓰기 어려운데
+ * 타입 체인을 통해 감별하는 방법이 있음
+ */
+
+console.log(Object.prototype.toString.call("hi")); // '[object String]'
+console.log(Object.prototype.toString.call(new String())); // '[object String]'
+
+const arr = [];
+const func = function () {};
+const date = new Date();
+
+console.log(Object.prototype.toString.call(arr)); // '[object Array]'
+console.log(Object.prototype.toString.call(func)); // '[object Function]'
+console.log(Object.prototype.toString.call(date)); // '[object Date]'
+
+/**
+ * JS에서 타입검사를 할 때 내가 잘 검사를 하고 있는지
+ * 항상 유의할 필요가 있음
+ *
+ * google 검색시
+ * javascript is function,
+ * javascript is Array 등
+ * 하나하나 구글링해보며 노하우를 키워야 함
+ *
+ * 스택 오버플로우에서 좋아요가 많은 의견들도 중요 하지만
+ * 그 의견이 언제 생성된건지도 유의하면서 확인할 것 (버전별로 상이할 수 있음)
+ */
